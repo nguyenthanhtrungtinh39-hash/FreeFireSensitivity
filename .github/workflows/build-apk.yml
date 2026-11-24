@@ -43,7 +43,6 @@ jobs:
           p.write_text(s)
           p = Path("app/src/main/res/layout/custom_splash_xposed.xml")
           s = p.read_text()
-          pattern = r'<ImageView\b[^>]*/>'
           replacement = '''<TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -53,11 +52,10 @@ jobs:
                   android:textSize="42sp"
                   android:textStyle="bold"
                   tools:ignore="HardcodedText" />'''
-          s, count = re.subn(pattern, replacement, s, count=1, flags=re.S)
+          s, count = re.subn(r'<ImageView\b[^>]*/>', replacement, s, count=1, flags=re.S)
           if count != 1:
               raise SystemExit("Could not replace Xposed splash logo")
           p.write_text(s.replace("Developed by ElectroHeavenVN", "PyzTech"))
-          # Keep the existing launcher label unchanged.
           app_strings = Path("app/src/main/res/values/strings.xml").read_text()
           if '<string name="app_name">ZaloXposed</string>' not in app_strings:
               raise SystemExit("Launcher label differs from expected original; refusing to change it")
@@ -70,11 +68,16 @@ jobs:
           java-version: '17'
           cache: gradle
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 12266719
+
       - name: Install Android SDK packages
         shell: bash
         run: |
           yes | sdkmanager --licenses >/dev/null
-          sdkmanager "platform-tools" "platforms;android-37" "build-tools;37.0.0"
+          sdkmanager "platform-tools" "platforms;android-37-ext2" "build-tools;37.0.0"
 
       - name: Download required native libraries
         working-directory: source
