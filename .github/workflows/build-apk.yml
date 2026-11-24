@@ -93,7 +93,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sdkmanager "platform-tools" "platforms;android-37-ext2" "build-tools;37.0.0"
+          sdkmanager --channel=3 "platform-tools" "platforms;android-37-ext2" "build-tools;37.0.0"
 
       - name: Download required native libraries
         working-directory: source
