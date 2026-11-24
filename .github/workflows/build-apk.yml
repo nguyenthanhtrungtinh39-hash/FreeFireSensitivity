@@ -93,7 +93,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sdkmanager --channel=3 --install "platform-tools" "platforms;android-37" "build-tools;37.0.0"
+          sdkmanager --channel=3 --install "platform-tools" "platforms;android-37.2" "build-tools;37.0.0"
           echo "Installed Android platform packages:"
           ls -1 "$ANDROID_HOME/platforms"
 
